@@ -56,13 +56,15 @@
 				</div>
 			</div>
 
-			<!-- web版才有top_bar -->
+			<!-- web版才有top_bar, 顯示店名/營業人/統編 -->
 			<div class="top_bar flex_center">
-				<div class="shop_name">麥町吐司工房-新莊中原店</div>
+				<div class="shop_name">麥町吐司工房-新莊中原店
+					<div class="shop_info">營業人：王小明．統編：87654321</div>
+				</div>
 				
 				<!-- 未登入狀態顯示 -->
 				<div class="open_menu" style="display: none;"><a @click.prevent="menberLogin"><i class="fas fa-user"></i></a></div>
-	
+
 				<!-- 已登入狀態顯示 -->
 				<div class="open_menu" onclick="$('.menu_user').fadeIn(300);" v-else><i class="fas fa-user-check"></i></div>
 			</div>
@@ -79,6 +81,13 @@
 					<a href="../portal/web_userdata"><i class="fas fa-user-edit"></i> 會員資料</a>
 					<a href="../portal/web_order"><i class="far fa-file-alt"></i> 訂單查詢</a>
 					<a href="#"><i class="fas fa-sign-out-alt"></i> 登出</a>
+				</div>
+			</div>
+
+			<!-- Line版加top_bar, 營業人/統編 -->
+			<div class="top_bar line flex_center">
+				<div class="shop_name">
+					<div class="shop_info">營業人：王小明．統編：87654321</div>
 				</div>
 			</div>
 		</header>
