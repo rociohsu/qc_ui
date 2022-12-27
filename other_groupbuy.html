@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-TW">
+<head>
+	<meta charset="UTF-8">
+	<title>麥町吐司工房-新莊中原店</title>
+	<meta name='description' content=""/>
+	<meta name='keywords' content=""/>
+	<meta name="MobileOptimized" content="width">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/standard.css">
+</head>
+<body>
+	<main id="main0" class="shop_mainbox shopping_order">
+		<header>
+			<!-- 揪團一起點bar, 進行ing, 團長可取消/分享, 團員可分享 -->
+			<section class="groupbuy_bar flex_center">
+				<div class="icon"><i class="fas fa-user-friends"></i></div>
+				<div class="status">一起點已收單<br>
+					<div class="master">團長：Ken</div>
+				</div>
+				<div class="btn flex_center">
+					<!-- 已收單狀態, 不顯示分享btn -->
+					<!-- <a class="share" href="#groupbuy" rel="modal:open"><i class="fas fa-link"></i> 分享</a> -->
+
+					<!-- 只有團長能取消揪團 -->
+					<a class="cancel" href="#groupbuy_cancel" rel="modal:open"><i class="fas fa-times"></i> 取消</a>	
+				</div>
+			</section>
+
+			<!-- 揪團一起點, 分享連結 -->
+			<div id="groupbuy" class="modal groupbuy">
+				<div class="title">分享連結給你身邊的人<br>揪團一起點！<br>好東西一起分享y（^ヮ^）y</div>
+				<div class="copy_link">
+					<input type="text" name="" value="https://www.quickclick.cc/quickclick5484w_ewoiewjoe-wkopekwe">
+					<button class="btn_yello" type="button">LINE分享</button>
+				</div>
+				<div class="qrcode_img">
+					<img src="images/KLEXNLURK2.png" alt="">
+				</div>	
+			</div>
+	
+			<!-- 揪團一起點, 取消一起點 -->
+			<div id="groupbuy_cancel" class="modal groupbuy">	
+				<div class="title">
+					<i class="fas fa-exclamation-triangle"></i>
+					揪團取消後將停止「一起點」，尚未送出訂單的團員將無法送單，確定要繼續嗎?
+				</div>
+				<div class="sys_btn flex_center">
+					<a class="back" href="#" rel="modal:close">返回</a>
+					<a class="next" href="#" rel="modal:close">確定取消</a>
+				</div>
+			</div>
+
+			<!-- web版才有top_bar -->
+			<div class="top_bar flex_center">
+				<div class="shop_name">麥町吐司工房-新莊中原店</div>
+				
+				<!-- 未登入狀態顯示 -->
+				<div class="open_menu" style="display: none;"><a @click.prevent="menberLogin"><i class="fas fa-user"></i></a></div>
+	
+				<!-- 已登入狀態顯示 -->
+				<div class="open_menu" onclick="$('.menu_user').fadeIn(300);" v-else><i class="fas fa-user-check"></i></div>
+			</div>
+
+			<!-- web版才有會員選單 -->
+			<div class="menu_user">
+				<div class="overlay_bg" onclick="$(this).closest('.menu_user').fadeOut(100);"></div>
+				<div class="menu_title">
+					<div class="user_name"><i class="fas fa-user-check"></i> Hi, Rocio</div>
+					<button class="close" ref="categoryList" onclick="$(this).closest('.menu_user').fadeOut(100);"><i class="fas fa-times"></i></button>
+				</div>
+				<div class="menu_list">
+					<a href="index.html"><i class="fas fa-utensils"></i> 點餐</a>
+					<a href="../portal/web_userdata"><i class="fas fa-user-edit"></i> 會員資料</a>
+					<a href="../portal/web_order"><i class="far fa-file-alt"></i> 訂單查詢</a>
+					<a href="#"><i class="fas fa-sign-out-alt"></i> 登出</a>
+				</div>
+			</div>
+		</header>
+
+		<section class="order_tools">
+			<div class="container flex_center">
+				<!-- 揪團一起點流程, 下一步：確認訂單資訊 -->
+				<a id="nextPage" class="btn next" href="step2_groupbuy.html">下一步</a>
+			</div>
+		</section>
+
+		<section class="other_remarks">
+			<div class="top_step">
+				<div class="container flex_center">
+					<p class="btn_in"><span>Other</span> 其它需求</p>
+				</div>
+			</div>
+			
+		    <!-- 胡椒/辣度 -->
+			<form class="add_other">
+				<div class="container">
+					<div>
+						<div class="title"><span class="must">*必選</span>選擇口味<i class="fas fa-caret-down"></i></div>
+						<div class="title_s">選擇口味</div>
+
+						<ul class="option_list">
+							<li>
+								<div class="the_radio">
+									<input type="radio" name="addon.id" id="addon.id">
+									<label for="addon.id">草莓 <span class="kcal">(+100kcal)</span></label>
+								</div>
+							</li>
+							<li>
+								<div class="the_radio out_of_stock">
+									<label for="addon.id">
+										<span style="color:red;">售完 </span>
+										<s>巧克力 <span class="kcal">(+100kcal)</span></s>
+									</label>
+								</div>
+							</li>
+						</ul>
+					</div>
+
+					<div>
+						<div class="title"><span class="must">*必選</span>選擇份量<i class="fas fa-caret-down"></i></div>
+						<div class="title_s">選擇份量</div>
+
+						<ul class="option_list">
+							<li>
+								<div class="the_checkbox">
+									<input type="checkbox" name="addon.id" id="value.id">
+									<label for="value.id">大份 <span class="kcal">(+100kcal)</span></label>
+								</div>
+							</li>
+							<li>
+								<div class="the_checkbox out_of_stock">
+									<label for="value.id">小份 <span class="kcal">(+100kcal)</span></label>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div><!-- END .container -->
+			</form><!-- END .add_other -->
+		</section>
+	</main>
+</body>
+</html>

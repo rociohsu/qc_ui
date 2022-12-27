@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-TW">
+<head>
+	<meta charset="UTF-8">
+	<title>確認訂購資訊</title>
+	<meta name='description' content=""/>
+	<meta name='keywords' content=""/>
+	<meta name="MobileOptimized" content="width">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/standard.css">
+</head>
+<body>
+	<main id="main2" class="shop_mainbox shopping_order">
+		<section class="loading_area" style="display: none;">
+			<div class="loader"></div>
+		</section>
+
+		<header>
+			<!-- web版才有top_bar -->
+			<div class="top_bar flex_center">
+				<div class="shop_name">麥町吐司工房-新莊中原店</div>
+				
+				<!-- 未登入狀態顯示 -->
+				<div class="open_menu" style="display: none;"><a @click.prevent="menberLogin"><i class="fas fa-user"></i></a></div>
+	
+				<!-- 已登入狀態顯示 -->
+				<div class="open_menu" onclick="$('.menu_user').fadeIn(300);" v-else><i class="fas fa-user-check"></i></div>
+			</div>
+
+			<!-- web版才有會員選單 -->
+			<div class="menu_user">
+				<div class="overlay_bg" onclick="$(this).closest('.menu_user').fadeOut(100);"></div>
+				<div class="menu_title">
+					<div class="user_name"><i class="fas fa-user-check"></i> Hi, Rocio</div>
+					<button class="close" ref="categoryList" onclick="$(this).closest('.menu_user').fadeOut(100);"><i class="fas fa-times"></i></button>
+				</div>
+				<div class="menu_list">
+					<a href="index.html"><i class="fas fa-utensils"></i> 點餐</a>
+					<a href="../portal/web_userdata"><i class="fas fa-user-edit"></i> 會員資料</a>
+					<a href="../portal/web_order"><i class="far fa-file-alt"></i> 訂單查詢</a>
+					<a href="#"><i class="fas fa-sign-out-alt"></i> 登出</a>
+				</div>
+			</div>
+		</header>
+
+		<section class="order_tools">
+			<div class="container flex_center">
+				<a class="btn back" href="step1.html">上一步</a>
+				<a class="btn next" href="#asktojoin" rel="modal:open">下一步</a>
+				<a class="btn next" href="#finish" rel="modal:open">前往結帳</a>
+				<a class="btn disabled" ref="closeFinish" href="#" rel="modal:close" style="display: none;"></a>
+			</div>
+		</section>
+
+		<section class="content_box">
+			<!-- 訂購資訊STEP -->
+			<div class="top_step">
+				<div class="container flex_center">
+					<p><span>Step1.</span> 取餐方式</p>
+					<i class="fas fa-long-arrow-alt-right"></i>
+					<p class="btn_in"><span>Step2.</span> 訂購資訊</p>
+				</div>
+			</div>
+
+			<div class="container">
+
+			<!-- 訂購明細 -->
+		    <form class="shopping_cart" @submit.prevent>
+		    	<div class="title">麥町吐司工房-新莊中原店</div>
+		    	<ul class="order_list_done">    		
+		    		<li>
+						<span>取餐方式：</span>
+						<span>內用</span>	    				
+					</li>
+					<li>
+						<span>外送地址：</span>
+						<span>新北市中和區</span>
+					</li>
+					<li>
+						<span>內用桌號：</span>
+						<span>1</span>
+					</li>
+					<li>
+						<span>取餐時間：</span>
+						<span>2020-09-13 16:59</span>
+					</li>
+		    		<li>
+						<span>店家地址：</span>
+						<span>新北市新莊區</span>
+					</li>
+					<li>
+						<span>店家電話：</span>
+						<span>(02)29123456</span>
+		    		</li>
+				</ul>
+
+				<!-- 一般的購物車列表 -->
+				<table class="order_list" cellpadding="0" cellspacing="0">
+					<thead>
+						<tr>
+							<th class="name">商品名稱</th>
+							<th class="nb">數量</th>
+							<th class="kcal">卡路里</th>
+							<th class="money">金額</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="name">紅茶<span>加珍珠$5</span></td>
+							<td class="nb">1</td>
+							<td class="kcal">500</td>
+							<td class="money">$<b>25</b></td>
+						</tr>
+						<tr>
+							<td class="name">熱拿鐵-中杯</td>
+							<td class="nb">1</td>
+							<td class="kcal">&nbsp;</td>
+							<td class="money">$<b>40</b></td>
+						</tr>
+						<tr>
+							<td class="name">塑膠袋1個</td>
+							<td class="nb">&nbsp;</td>
+							<td class="kcal">&nbsp;</td>
+							<td class="money">$<b>3</b></td>
+						</tr>
+					</tbody>
+				</table>		
+
+					<ul class="calculate">
+						<!-- 整單加購 -->
+						<li class="calculate_list">
+							<span>塑膠袋1個</span>
+							<span class="price">$<b>3</b></span>
+						</li>
+						<li class="calculate_list">
+							<span>服務費(10%)</span>
+							<span class="price">$<b>100</b></span>
+						</li>
+	
+						<li class="calculate_list">
+							<span>外送費用</span>
+							<span class="price">$<b>80</b></span>
+						</li>
+	
+						<li class="calculate_list discount">
+							<span>店家負擔外送費用</span>
+							<span class="price">-$<b>80</b></span>
+						</li>
+	
+						<li class="calculate_list discount">
+							<span>滿$1000折扣</span>
+							<span class="price">-$<b>100</b></span>
+						</li>
+
+						<li class="calculate_list discount">
+							<span><i class="icon-pickup"></i>寄杯憑證：熱拿鐵-中杯</span>
+							<span class="price">-$<b>40</b></span>
+						</li>
+	
+						<li class="calculate_list discount point">
+							<div class="qcmoney">目前累積：15</div>
+							<span><input type="checkbox" name="discount" id="discount_point" checked><label for="discount_point"><i></i></label>
+								<label for="discount_point"><i class="icon-point">$</i>快金折抵</label>
+							</span>
+							<span class="price">-$<input type="number" min="0" max="15" value="15" /></span>
+						</li>
+
+						<!-- 快金0元顯示
+						<li class="calculate_list discount point disabled">
+							<span><i class="icon-point">$</i>快金折抵</span>
+							<span class="price">$<b>0</b></span>
+						</li> -->
+	
+						<!-- <li class="calculate_list discount coupon">
+							<span><input type="checkbox" name="discount" id="discount_coupon"><label for="discount_coupon"><i></i></label>
+								<a class="option" href="#coupon" rel="modal:open"><i class="icon-coupon"></i><span>選擇優惠券或輸入優惠碼</span></a>
+							</span>
+							<span><a href="#coupon" rel="modal:open"><i class="fas fa-angle-right"></i></a></span>
+						</li> -->
+					</ul>
+	
+					<div class="totalbar">
+						總計 <b>3</b> 項 / 共 <span class="price">$<b>299</b></span>
+						<div class="kcal">總卡路里：500kcal</div>
+					</div>
+				</form>
+	
+				<!-- 請填寫訂購資訊 -->
+				<form class="shopping_cart">
+					<div class="title">請填寫訂購資訊</div>
+					
+					<ul class="order_consumer_info">
+						<li>
+							<label class="title_s" for="name"><span class="f_red">*</span>訂購人</label>
+							<div class="f_box">
+								<input id="name" type="text" name="" ref="name" placeholder="請輸入訂購人姓名">
+							</div>
+							<!-- <div class="error"><i class="fas fa-exclamation-circle"></i> 請勿使用特殊符號、全型英數或Emoji </div>-->
+						</li>
+	
+						<!-- 第一次尚未驗證手機號碼 -->
+						<li>
+							<label class="title_s" for="phone"><span class="f_red">*</span>手機號碼</label>
+							<div class="phone_verification">
+								<div class="mobile_bar flex_center">
+									<input id="phone" type="text" name="" ref="phone" placeholder="例： 0912345678">
+									<button class="btn" type="button" ref="getCodeBtn">取得驗證碼</button>
+								</div>
+								<!-- <div class="error"><i class="fas fa-exclamation-circle"></i> 格式錯誤</div> -->
+							</div>
+	
+							<div class="verification_not_yet">
+								<div class="phone_verification">
+									<div class="f_box">
+										<input type="text" maxlength="4" ref="codeInput" placeholder="請輸入驗證碼">
+									</div>
+								</div>
+								<a class="prompt" href="#cs" rel="modal:open">
+									<i class="fas fa-exclamation-circle"></i> 收不到簡訊嗎?
+								</a>
+							</div>
+
+							<!-- 收不到簡訊, 聯繫客服modal -->
+							<div id="cs" class="modal cs">
+								<div class="title">請聯繫客服為您處理</div>
+								<div class="editor">
+									LINE官方客服ID：<br>
+									<span class="line">@quickclick</span>  or  
+									<a class="line" href="https://line.me/R/ti/p/%40tba6961e">點此加入</a>
+								</div>
+							</div>
+						</li>
+	
+						<!-- 驗證過可修改手機號碼 -->
+						<li>
+							<label class="title_s" for="phone"><span class="f_red">*</span>手機號碼</label>
+							<div class="phone_verification">
+								<div class="mobile_bar flex_center">
+									<p class="phone">+886912345678</p>
+									<a class="btn" @click="editPhone()">修改</a>
+								</div>
+							</div>
+						</li>
+	
+						<li>
+							<label class="title_s" for="email">Email</label>
+							<div class="f_box">
+								<input id="email" type="text" name="" ref="email" placeholder="請輸入Email">
+							</div>
+							<!-- <div class="error"><i class="fas fa-exclamation-circle"></i> 格式錯誤</div> -->
+						</li>
+	
+						<li>
+							<label class="title_s" for="note">備註(最多 200 個字元)</label>
+							<div class="f_box">
+								<textarea id="comment" type="text" name="" ref="comment"></textarea>
+							</div>
+							<!-- <div class="error"><i class="fas fa-exclamation-circle"></i> 字數超過限制</div> -->
+						</li>
+	
+						<li>
+							<div class="title_s">統一編號(非必填)</div>
+							<div class="f_box">
+								<input id="invoice" type="text" name="" ref="invoice" placeholder="請輸入統一編號(8位數字)" >
+							</div>
+							<!-- <div class="f_box">
+								<input id="code" type="text" name="" value="" placeholder="請填入發票抬頭">
+							</div> -->
+							<div class="error"><i class="fas fa-exclamation-circle"></i>格式錯誤</div>
+						</li>
+						<li>
+							<div class="the_checkbox">
+								<input id="invoice1" type="checkbox" name="field" value="option">
+								<label class="title_s" for="invoice1"><i></i>索取收據</label>
+							</div>
+						</li>
+					</ul><!-- END .order_consumer_info -->					
+				</form>
+			</div>
+		</section>
+
+		<!-- 選擇付款方式 -->
+		<div id="finish" class="modal finish">
+			<form class="shopping_cart">
+				<div class="title">請選擇付款方式</div>
+
+				<ul class="pay_way flex_center">
+					<li :class="cashClass" v-on:click="choosePaymentType('cash')" v-show="paymentCash()">
+						<p>現場付款</p>
+					</li>
+					<li :class="qrpayClass" v-on:click="choosePaymentType('qrpay')" v-show="paymentPay()">
+						<p>線上付款</p>
+					</li>
+				</ul>
+			</form>
+		</div>
+
+		<!-- 是否加入商業獅集點會員 -->
+		<div id="asktojoin" class="modal asktojoin">
+			<form class="shopping_cart">
+				<div class="title"><i class="attention">i</i></div>
+	    		<h2>是否同意以 0912345678 電話<br>加入商業獅會員平台累積點數</h2>
+				<h3>同意加入後<br>可立即折抵15元</h3>
+
+				<div class="info">
+					<h4>點數說明</h4>
+					<ul>
+						<li>消費50元可累積商業獅點數1點</li>
+						<li>累積20點可兌換快金100元</li>
+						<li>可於快一點結帳時，按比例折抵現金</li>
+						<li>點數及快金可至訂單及設定查詢</li>
+					</ul>
+				</div>
+
+				<div class="sys_btn flex_center">
+					<a class="back" href="#" rel="modal:close">不同意</a>
+					<a class="next" href="#" rel="modal:close">同意加入</a>
+				</div>
+			</form>
+		</div>
+		
+	</main>
+</body>
+</html>

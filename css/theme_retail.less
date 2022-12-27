@@ -1,0 +1,76 @@
+@charset "utf-8";
+
+// color
+@color-cisbase: #009a44;
+@color-cisother: #34A853;
+@color-totalbar: #e8f0e6;
+
+// img url
+@url: "../images/svg";
+
+/* jQuery Modal*/
+.jquery-modal.blocker {
+	.modal .sys_btn .next { background: @color-cisbase; }
+}
+i.attention { color: @color-cisbase; border-color: @color-cisbase; }
+
+/* 選單滑動提示 */
+.changeMenu_demo .inner a, .changeMenu_demo .inner b { color: @color-cisbase; }
+.changeMenu_demo .btn {background: @color-cisbase; }
+
+/* 隱私權政策及服務條款 */
+#privacy_term .btn_select button { background: @color-cisbase; }
+
+/* 頁首 */
+i.fa-user-check { color: @color-cisbase; }
+
+/* 上方分類選單 */
+.top_menu .swiper-container .swiper-slide p.btn_in { background: @color-cisbase; }
+
+/* 頁尾 */
+.order_tools .btn.next { background: @color-cisbase; }
+
+/* 購物車 */
+.shopping_cart .title_s b { color: @color-cisbase; }
+
+/* 總計品項/價格 */
+.totalbar { background: @color-totalbar; }
+
+/*品項多選單選*/
+.option_list li .the_radio input[type=radio]:checked + label, 
+.option_list li .the_checkbox input[type=checkbox]:checked + label { border-color: @color-cisbase; background-color: @color-cisbase; }
+
+/* 結帳流程 */
+.top_step p.btn_in { border-color: @color-cisbase;
+	span{ color: @color-cisbase; }
+}
+.open_order_detail { color: @color-cisbase; border-color: @color-cisbase; }
+.get_way, .pay_way { 
+	li.the_selected { border-color: @color-cisbase; 
+		p { color: @color-cisbase; }
+		.a_box { color: @color-cisbase;
+			#tableNumber { color: @color-cisbase; border-color: @color-cisbase; }
+			#tableNumber:disabled { color: @color-cisbase; -webkit-text-fill-color: @color-cisbase; }
+		}
+	}
+}
+
+.choose_delivery .delivery_calculate .address_bar .btn { background: @color-cisbase; }
+.order_consumer_info {
+	li {
+		.mobile_bar .btn { background: @color-cisbase; }
+		.error_tips input { background: @color-totalbar; }
+	}
+	.the_checkbox { 
+		input[type="radio"] + label i, input[type="checkbox"] + label i { border-color: @color-cisbase; }
+		input[type="radio"]:checked + label i, input[type="checkbox"]:checked + label i { background: @color-cisbase url("@{url}/check.svg") no-repeat center; }
+	}
+}
+
+/* 是否加入商業獅集點會員 */
+.asktojoin {
+	h3 { color: @color-cisbase; }
+	.info {
+		h4 { color: @color-cisbase; }
+	}
+}

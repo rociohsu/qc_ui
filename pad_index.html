@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-TW">
+<head>
+	<meta charset="UTF-8">
+	<title>點餐</title>
+	<meta name='description' content=""/>
+	<meta name='keywords' content=""/>
+	<meta name="MobileOptimized" content="width">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/standard.css">
+	<link rel="stylesheet" href="css/theme_pad.css">
+</head>
+<body>
+	<main id="main" class="shop_mainbox">
+
+	<section class="loading_area" style="display: none;">
+		<div class="loader"></div>
+	</section>
+
+	<!-- QRCode失效 / 揪團一起點連結失效 -->
+	<section class="page_notfound container flex_center flex_wrap" style="display: none;">
+		<div>
+			<div class="icon-notfound"></div>
+			<div><b>OOPS!</b></div>
+			<div>此連結已失效</div>
+		</div>
+	</section>
+
+	<header>
+		<!-- web版才有top_bar -->
+		<div class="top_bar flex_center">
+			<div class="shop_name">麥町吐司工房-新莊中原店</div>
+			
+			<!-- 未登入狀態顯示 -->
+			<div class="open_menu" style="display: none;"><a @click.prevent="menberLogin"><i class="fas fa-user"></i></a></div>
+
+			<!-- 已登入狀態顯示 -->
+			<div class="open_menu" onclick="$('.menu_user').fadeIn(300);" v-else><i class="fas fa-user-check"></i></div>
+		</div>
+
+		<nav class="top_menu flex_center">		
+			<div class="swiper-container">
+				<div id="category-nav" class="swiper-wrapper">
+					<div class="swiper-slide">
+						<a href="#store_notice" rel="modal:open">公告</a>
+					</div>
+					<div class="swiper-slide" onclick="$('.ordered_list').show();$('.product_list').hide();">
+						<p>再點一次</p>
+					</div>
+					<div class="swiper-slide" onclick="$('.ordered_list').hide();$('.product_list').show();">
+						<p class="btn_in">優惠套餐<span class="nb" style="display: none;"></span></p>
+					</div>
+					<div class="swiper-slide">
+						<p>主餐<span class="nb" style="display: none;"></span></p>
+					</div>
+					<div class="swiper-slide">
+						<p>甜點<span class="nb" style="display: none;"></span></p>
+					</div>
+					<div class="swiper-slide">
+						<p>飲料<span class="nb" style="display: none;"></span></p>
+					</div>
+					<div class="swiper-slide">
+						<p>主餐<span class="nb" style="display: none;"></span></p>
+					</div>
+					<div class="swiper-slide">
+						<p>甜點<span class="nb" style="display: none;"></span></p>
+					</div>
+					<div class="swiper-slide">
+						<p>飲料<span class="nb" style="display: none;"></span></p>
+					</div>
+					
+				</div>
+			</div>
+			<div class="open_menu" onclick="$('.menu_all').fadeIn(300);"><i class="fas fa-angle-down"></i></div>
+		</nav>
+
+		<!-- 打開選單所有分類 -->
+		<div class="menu_all">
+			<div class="overlay_bg" onclick="$(this).closest('.menu_all').fadeOut(100);"></div>
+			<div class="menu_title"><i class="fas fa-bars"></i> 商品分類
+				<button class="close" ref="categoryList" onclick="$(this).closest('.menu_all').fadeOut(100);"><i class="fas fa-times"></i></button>
+			</div>
+			<div class="menu_list">
+				<a>優惠套餐<span class="nb" style="display: none;">0</span></a>
+				<a>主餐<span class="nb" style="display: none;">0</span></a>
+				<a>甜點<span class="nb" style="display: none;">0</span></a>
+				<a>飲料<span class="nb" style="display: none;">0</span></a>
+			</div>
+		</div>
+
+		<!-- web版才有會員選單 -->
+		<div class="menu_user">
+			<div class="overlay_bg" onclick="$(this).closest('.menu_user').fadeOut(100);"></div>
+			<div class="menu_title">
+				<div class="user_name"><i class="fas fa-user-check"></i> Hi, 訪客</div>
+				<button class="close" ref="categoryList" onclick="$(this).closest('.menu_user').fadeOut(100);"><i class="fas fa-times"></i></button>
+			</div>
+			<div class="menu_list">
+				<a href="pad_index.html"><i class="fas fa-utensils"></i> 點餐</a>
+				<a href="../portal/web_userdata"><i class="fas fa-user-edit"></i> 會員資料</a>
+				<a href="../portal/web_order"><i class="far fa-file-alt"></i> 訂單查詢</a>
+				<a href="#"><i class="fas fa-sign-out-alt"></i> 登出</a>
+			</div>
+		</div>
+	</header>
+
+	<!-- 揪團一起點開團按鈕, 未開團或未加入開團時才顯示 -->
+	<a class="groupbuy_startbtn flex_center" href="index_groupbuy.html"><i class="fas fa-user-friends"></i>揪團</a>
+
+	<div class="icon_cart">
+		<a href="#shopping_cart" rel="modal:open">
+			<span class="nb">99</span>
+			<i class="fas fa-shopping-cart"></i>
+		</a>
+	</div>
+
+	<section class="order_tools">
+		<div class="container flex_center">
+			<!-- 正常點餐時顯示 -->
+			<div class="order_amount">訂單小計<span>$<b>1450</b></span>
+				<div class="kcal">卡路里：300kcal</div>
+			</div>
+			
+			<a class="btn next" href="pad_other.html">我要結帳</a>
+		</div>
+
+		<div class="container flex_center" style="display: none;">
+			<!-- 後結版-超過用餐時間時顯示 -->
+			<a class="btn disabled">暫不開放點餐</a>
+		</div>
+	</section>
+
+	<main class="product_area">
+		<div class="container">
+			<div class="searchbar">
+				<div class="container flex_center">
+					<button type="button"><i class="fas fa-search"></i></button>
+					<input type="text" placeholder="搜尋全部商品">
+				</div>
+			</div>
+
+			<ul class="ordered_list" style="display: none;">
+				<h1>再點一次</h1>
+				<li>
+					<div class="order_info">訂單編號：12345678<br>下單時間：2020-09-11 13:49</div>
+					<ul class="products">
+						<li>草莓吐司</li>
+						<li>巧克力吐司(卡拉雞腿+$30/卡拉雞腿+$30/卡拉雞腿+$30)</li>
+					</ul>
+					<div class="focus">
+						<div class="price">$<b>60</b></div>
+						<button class="addtocart">加入購物車</button>
+					</div>
+				</li>
+				<li>
+					<div class="order_info">訂單編號：87654321<br>下單時間：2020-09-11 13:49</div>
+					<ul class="products">
+						<li>綠茶(芋圓 $5/小杯)</li>
+						<li>紅茶(芋圓 $5(三倍 $5)/大杯 $10)</li>
+						<li>烏龍茶(小杯)</li>
+						<li>鮮奶茶(珍珠 $5/大杯 $10)</li>
+						<li>柳橙綠茶(小杯)</li>
+						<li>百香紅茶(耶果 $5/大杯 $10)</li>
+					</ul>
+					<div class="focus">
+						<div class="price">$<b>300</b></div>
+						<button class="addtocart">加入購物車</button>
+					</div>
+				</li>
+			</ul><!-- END .ordered_list -->
+
+			<ul class="product_list style_one">
+				<h1>優惠套餐</h1>
+				<li class="flex_top">
+					<div class="product_info with_photo">
+						<div class="name">紅茶紅茶紅茶紅茶紅茶紅茶紅茶紅茶</div> 
+						<div class="desc">
+							<p>內容內容1<br>內容內容2</p>
+						</div> 
+						<div class="price">
+							$<b>299</b>
+							<del>$399</del>
+						</div>
+						<div class="kcal">卡路里：300kcal</div>
+						<div class="inventory">剩餘數量：10</div>
+					</div>
+
+					<div class="photo" style="background-image: url(images/product1.jpg);"></div> 
+				</li>
+
+				<li class="flex_top">
+					<div class="product_info">
+						<div class="name">紅茶</div> 
+						<div class="desc">
+							<p>內容內容<br>內容內容</p>
+						</div> 
+						<div class="price">
+							$<b>299</b>
+							<del>$399</del>
+						</div>
+						<div class="kcal">卡路里：300kcal</div>
+						<div class="inventory">剩餘數量：10</div>
+					</div>
+					<div class="nb">1</div>
+					<div class="sold_out flex_center"><b>售完</b></div>
+				</li>
+
+				<li class="flex_top">
+					<div class="product_info with_photo">
+						<div class="name">紅茶</div> 
+						<div class="desc">
+							<p>內容內容<br>內容內容</p>
+						</div> 
+						<div class="price">
+							$<b>299</b>
+							<del>$399</del>
+						</div>
+						<div class="kcal">卡路里：300kcal</div>
+						<div class="inventory">剩餘數量：10</div>
+					</div>
+
+					<div class="photo" style="background-image: url(images/product1.jpg);"></div> 
+					<div class="nb">1</div>
+					<div class="sold_out flex_center"><b>售完</b></div>
+				</li>
+
+				<li class="flex_top">
+					<div class="product_info with_photo">
+						<div class="name">紅茶</div> 
+						<div class="desc">
+							<p>內容內容<br>內容內容</p>
+						</div> 
+						<div class="price">
+							$<b>299</b>
+							<del>$399</del>
+						</div>
+						<div class="kcal">卡路里：300kcal</div>
+						<div class="inventory">剩餘數量：10</div>
+					</div>
+
+					<div class="photo" style="background-image: url(images/product2.jpg);"></div> 
+					<div class="nb">1</div>
+				</li>
+
+				<li class="flex_top">
+					<div class="product_info">
+						<div class="name">紅茶</div> 
+						<div class="desc">
+							<p>內容內容<br>內容內容</p>
+						</div> 
+						<div class="price">
+							$<b>299</b>
+							<del>$399</del>
+						</div>
+						<div class="kcal">卡路里：300kcal</div>
+						<div class="inventory">剩餘數量：10</div>
+					</div>
+
+					<div class="nb">1</div>
+					<div class="sold_out flex_center"><b>售完</b></div>
+				</li>
+
+				<li class="flex_top">
+					<div class="product_info">
+						<div class="name">紅茶</div> 
+						<div class="desc">
+							<p>內容內容<br>內容內容</p>
+						</div> 
+						<div class="price">
+							$<b>299</b>
+							<del>$399</del>
+						</div>
+						<div class="kcal">卡路里：300kcal</div>
+						<div class="inventory">剩餘數量：10</div>
+					</div>
+
+					<div class="nb">1</div>
+				</li>
+			</ul>
+		</div>
+	</main>
+
+		<!-- 購物車 -->
+	    <div id="shopping_cart" class="modal shopping_cart">
+	    	<div class="title">訂購明細</div>
+			<div class="title_s">目前選購 <b>3</b> 項商品</div>
+
+			<ul class="shopping_car_list">
+				<li class="flex_top">
+					<div class="product_info">
+						<div class="name">毆姆蛋</div>
+						<div class="other">漢堡 $10 (花生口味)(+100kcal)，加購：薯條 $15 (+100kcal)、奶茶 $25 (特大杯 $10，配料：椰果 $10、珍珠 $10)(+100kcal)</div>
+						<div class="money">$105 + $70</div>
+					</div>
+					
+					<div class="photo" style="background-image: url(images/product1.jpg);"></div>
+
+					<div class="set_num flex_center">
+						<div class="input_quantity flex_center">
+							<button><i class="fas fa-minus"></i></button>
+							<input type="text" name="" value="1" placeholder="0">
+							<button><i class="fas fa-plus"></i></button>
+						</div>
+						<div class="money">
+							<p>$105</p>
+							<div class="kcal">500kcal</p>
+						</div>
+					</div>    
+				</li>
+				
+				<li class="flex_top">
+					<div class="product_info">
+						<div class="name">毆姆蛋</div>
+						<div class="other">漢堡 $10 (花生口味)(+100kcal)，加購：薯條 $15 (+100kcal)、奶茶 $25 (特大杯 $10，配料：椰果 $10、珍珠 $10)(+100kcal)</div>
+						<div class="money">$105 + $70</div>
+					</div>
+					
+					<div class="photo" style="background-image: url(images/product2.jpg);"></div>
+
+					<div class="set_num flex_center">
+						<div class="input_quantity flex_center">
+							<button><i class="fas fa-minus"></i></button>
+							<input type="text" name="" value="1" placeholder="0">
+							<button><i class="fas fa-plus"></i></button>
+						</div>
+						<div class="money">
+							<p>$105</p>
+							<div class="kcal">500kcal</p>
+						</div>
+					</div>    
+	            </li>
+			</ul>
+
+			<div class="totalbar">
+				總計 <b>3</b> 項 / 共 <span class="price">$<b>299</b></span>
+				<div class="kcal">總卡路里：500kcal</div>
+			</div>
+
+		    <div class="sys_btn flex_center">
+		    	<a class="back" href="#" rel="modal:close" ref="contiShopping">回目錄</a>
+		    	<a class="next" href="pad_other.html" target="_parent">我要結帳</a>
+			</div>
+		</div>
+		
+	    <!-- 請選擇 品項 與 加購-->
+	     <div id="food_items" class="modal food_items">
+			<div class="photo" style="background-image: url(images/product2.jpg);"></div>
+
+			<h2 class="product_name">優惠套餐
+				<div class="price">
+					$<b>299</b>
+					<del>$300</del>
+				</div>
+				<div class="kcal">卡路里：300kcal</div>
+			</h2>
+
+			<div class="product_info editor">
+				<p>內容內容<br>內容內容</p>
+			</div>
+ 	
+			<div class="title"><span class="must" v-show="option.required">*必選</span>請選擇麵包<i class="fas fa-caret-down"></i></div>
+			<div class="title_s">您喜歡的口感</div>
+		    <ul class="option_list">
+				<li>
+					<div class="the_radio">
+						<input type="radio" name="aa" id="a1" value="吐司">
+						<label for="a1">吐司 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+				  <li>
+					<div class="the_radio">
+						<input type="radio" name="aa" id="a2" value="漢堡">
+						<label for="a2">漢堡 +$10 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+				<li>
+					<div class="the_radio">
+						<input type="radio" name="aa" id="a3" value="貝果">
+						<label for="a3">貝果 +$15 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+			</ul>		
+
+			<div class="title"><span class="must" v-show="option.required">*必選</span>請選擇口味<i class="fas fa-caret-down"></i></div>
+			<ul class="option_list">
+				<li>
+					<div class="the_radio out_of_stock">
+						<input type="radio" name="bb" id="b1" value="草莓">
+						<label for="b1">草莓 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+				  <li>
+					<div class="the_radio">
+						<input type="radio" name="bb" id="b2" value="奶油">
+						<label for="b2">奶油 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+				<li>
+					<div class="the_radio">
+						<input type="radio" name="bb" id="b4" value="花生">
+						<label for="b4">花生 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+				<li>
+					<div class="the_radio">
+						<input type="radio" name="bb" id="b3" value="巧克力">
+						<label for="b3">巧克力 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+			</ul>
+		    		
+
+			<div class="title">加購項目<i class="fas fa-caret-down"></i></div>	
+			<ul class="option_list">
+				<li>
+					<div>
+						<div class="the_checkbox out_of_stock">
+							<input type="checkbox" name="cc" id="c1" value="">
+							<label for="c1">薯條 +$15 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<div class="the_checkbox">
+							<input type="checkbox" name="cc" id="c2" value="">
+							<label for="c2">雞塊 +$20 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<div class="the_checkbox out_of_stock">
+							<input type="checkbox" name="cc" id="c3" value="">
+							<label for="c3">咖啡 +$15 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<div class="the_checkbox">
+							<input type="checkbox" name="cc" id="c4" value="">
+							<label for="c4">奶茶 $15 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			<div class="title">加購項目<i class="fas fa-caret-down"></i></div>	
+			<div class="title_s">(重複點擊可累加數量)</div>
+			<ul class="option_list clearfix">
+				<li>
+					<div class="the_checkbox choice_num out_of_stock">
+						<input type="hidden" name="ee" id="e1" value="0">
+						<label for="e1">紅茶 +$15 <span class="kcal">(+100kcal)</span></label>
+						<div class="set_num">0</div>
+					</div>
+				</li>
+				<li>
+					<div class="the_checkbox choice_num">
+						<input type="hidden" name="ee" id="e2" value="0">
+						<label for="e2">可樂 +$20 <span class="kcal">(+100kcal)</span></label>
+						<div class="set_num">0</div>
+					</div>
+				</li>
+				<li>
+					<div class="the_checkbox choice_num">
+						<input type="hidden" name="ee" id="e3" value="0">
+						<label for="e3">奶茶 $15 <span class="kcal">(+100kcal)</span></label>
+						<div class="set_num">0</div>
+					</div>
+				</li>
+				<li class="reset_bar">
+					<button class="reset_all_num">重設加購數量</button>
+				</li>
+			</ul>
+
+			<div class="totalbar">
+				小計<span class="price">$<b>299</b></span>
+				<div class="kcal">卡路里：500kcal</div>
+			</div>
+
+			<div class="title_s flex_center">此商品/套餐數量</div>
+			<div class="input_quantity flex_center">
+				<button><i class="fas fa-minus"></i></button>
+				<input type="text" name="" value="" placeholder="1">
+				<button><i class="fas fa-plus"></i></button>
+			</div>			
+
+			<div class="sys_btn flex_center">
+				<a class="back" href="#" rel="modal:close">回目錄</a>
+				<a class="next" href="#food_items2" rel="modal:open">選好了</a>
+			</div>
+		</div>
+		
+	    <!-- 飲料-->
+	    <div id="food_items2" class="modal food_items">
+	    	<div class="title"><span class="must" v-show="option.required">*必選</span>請選擇飲料大小<i class="fas fa-caret-down"></i></div>
+			<ul class="option_list">
+				<li>
+					<div class="the_radio">
+						<input type="radio" name="aaaa" id="uuu" value="特大杯">
+						<label for="uuu">特大杯 $10 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+				  <li>
+					<div class="the_radio">
+						<input type="radio" name="aaaa" id="iii" value="大杯">
+						<label for="iii">大杯 $8 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+				<li>
+					<div class="the_radio">
+						<input type="radio" name="aaaa" id="ooo" value="小杯">
+						<label for="ooo">小杯 $5 <span class="kcal">(+100kcal)</span></label>
+					</div>
+				</li>
+			</ul>		
+				
+			<div class="title">請選擇飲料配料<i class="fas fa-caret-down"></i></div>
+			<ul class="option_list">
+				<li>
+					<div>
+						<div class="the_checkbox">
+							<input type="checkbox" name="a" id="aaa" value="椰果">
+							<label for="aaa">椰果 $10 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<div class="the_checkbox">
+							<input type="checkbox" name="b" id="bbb" value="珍珠">
+							<label for="bbb">珍珠 $10 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<div class="the_checkbox">
+							<input type="checkbox" name="b" id="ccc" value="愛玉">
+							<label for="ccc">愛玉 $10 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<div class="the_checkbox">
+							<input type="checkbox" name="b" id="ddd" value="芋頭">
+							<label for="ddd">芋頭 $15 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div>
+						<div class="the_checkbox">
+							<input type="checkbox" name="b" id="eee" value="蘆薈 $10">
+							<label for="eee">蘆薈 $10 <span class="kcal">(+100kcal)</span></label>
+						</div>
+					</div>
+				</li>
+			</ul>
+					
+			<div class="sys_btn flex_center">
+				<a class="next" href="#food_items2" rel="modal:close">選好了</a>
+			</div>		
+		</div>
+
+	    <!-- 公告 -->
+	    <div id="store_notice" class="modal store_notice">
+			<div class="title">公告</div>
+	    	<article class="notice_content">
+				<div class="photo_content">
+					<img alt="來店買奶茶送5聯名巧禮" src="http://50lan.com/web/bookpic/images/50%E5%B5%90_%E8%A8%AD%E8%A8%88-Web-NEWS-%E8%B2%B7%E5%A5%B6%E8%8C%B6%E9%80%81%E5%B7%A7%E7%A6%AE.gif" width="100%">
+				</div>
+				<div class="editor">
+					活動注意事項:<br>1.僅限於台北市、新北市、基隆僅限於台北市、新北市、基隆僅限於台北市、新北市、基隆僅限於台北市、新北市、基隆僅限於台北市、新北市、基隆市之5間門市。<br>2.不適用於外送。<br>3.本公司保有活動修改之權利。
+				</div>
+			</article>
+			<div class="sys_btn flex_center">
+		    	<a class="next" href="#food_items2" rel="modal:close">確定</a>
+		  	</div>
+		</div>
+		
+		<!-- 登入提醒 -->
+	    <div id="login_notice" class="modal login_notice">
+			<div class="title"><i class="attention">i</i></div>
+	    	<div class="editor">請先登入會員，將商品加入購物車。</div>
+			<div class="sys_btn flex_center">
+		    	<a class="next" href="../portal/web_login">登入</a>
+		  	</div>
+		</div>
+		
+		<!-- 選單滑動提示 -->
+		<section class="changeMenu_demo" style="display: none;">
+			<div class="inner">
+				<div class="teach">
+					<div>左滑<b>可快速切換</b>商品分類</div>
+					<div class="arrow"></div>
+					<div class="finger"></div>
+				</div>
+				<div class="argree_term">點選我知道了，即代表您同意<br><a onclick="$('#privacy_term').toggle();">「網站服務條款及隱私權政策」</a></div>
+				<button class="btn" onclick="$('.changeMenu_demo').hide();">我知道了</button>
+			</div>
+		</section>
+
+		<!-- 隱私權政策及服務條款 -->
+		<div id="privacy_term">
+			<a class="close" onclick="$('#privacy_term').toggle();"><i class="fas fa-times"></i></a>
+			<div class="btn_select">
+				<!-- 關掉隱私權 及 選單滑動提示 -->
+				<button class="btn" onclick="$('.changeMenu_demo').hide();$('#privacy_term').toggle();">我知道了</button>
+			</div>
+			<div class="container">
+				<h3>個人資料授權原則及使用同意書</h3>
+				<p>【點點全球股份有限公司】(以下稱「本公司」)提供之「快一點」（以下稱「本服務」）非常重視並尊重您的隱私權。為了幫助您瞭解本服務如何收集、應用及保護您的個人資訊，請詳細閱讀以下個人資料授權原則及使用同意書(以下稱「本同意書」)。由於本公司必須收集以下個人資料及使用同意，才能確保服務持續性並保障您的權益，因此若您不同意以下本同意書之全部或部分內容，請您停止使用本服務。為尊重您的選擇，您有權隨時撤回對本同意書之同意。</p>
+				<ol>
+					<li>1.本同意書之範圍：本同意書適用於您使用本服務或向本服務透過電話、傳真、電子郵件或其他傳輸方式提出查詢、點餐或行銷活動時，所涉及之個人資料蒐集、處理與利用行為。您瞭解並同意，若您使用本服務時有點擊或瀏覽本公司或本服務以外之第三方連結或網站，您的個人資料將適用該第三方之個人資料保護政策，本同意書並不適用。</li>
+					<li>2.個人資料蒐集之目的: 提供您使用本服務，並協助本公司運營所必要之一切目的，包含但不限於本服務之運作、行銷、廣告、會員管理、數據統計、優化、第三人之業務合作、驗證您的身分、協助執法機關及政府機關執行公務。</li>
+					<li>3.個人資料蒐集類型：本公司可能會蒐集到包含但不限於您的姓名、出生年月日、國民身分證統一編號、護照號碼、特徵、指紋、婚姻、家庭、教育、職業、聯絡方式、財務情況、社會活動及其他與本服務相關而得以直接或間接方式識別您之個人資料（包含但不限於LINE User ID、信用卡資訊、IP地址、憑證序號、銀行帳戶等）。</li>
+					<li>4.適當安全維護措施：依「個人資料保護法施行細則」（下稱「個資法施行細則」）第12條，適當安全維護措施指廠商為防止個人資料被竊取、竄改、毀損、滅失或洩漏，採取技術上 及組織上  之措施  ；前述  措施得包括配置  管理之人員及相當資源、界定 個人資料之範圍、個人資料之風險評估及管理機制、事故 之預防、 通報 及應 變機制、個人資料蒐集、處理及利用之內部管理程序、資料安全管理及人員管理、認知宣導及教育  訓練 、設備 安全管理、資料安全稽核 機制、使用  紀錄 、軌跡 資料及證據保存及個人資料安全維護之整體持續改  善。本公司將依此提供符合相關法令規定  之技 術與安全維護措施，以妥善 保護您的個人資料。</li>
+					<li>5.個人資料利用之期間： 自您開始 使用本服務時，至您要 求停止使用本服務之時，或本公司停止向您提供本服務為止（以時間較早者為準）。</li>
+					<li>6.個人資料利用之地區：同意將您的個人資料利用於本公司執行業務、運營本服務及伺服器存放之地區。</li>
+					<li>7.個人資料之分享: 除以下任一情況外，本公司不會將您的個人資料提供於本公司以外之第三人：(1)於事先 取得您同意之情形下；(2)本公司得將個人資訊提供給本公司之海內外關係企 業、合作夥伴(例如:提供餐點之商家或LINE)、委外或協  力廠商(例如:行銷公司、廣告公司、系統維護公司、系統服務供應商、系統建置 公司、數據分析公司)、經本公司合法授權之第三方、以及本服務信任之第三方或人員；(3)須提供您的個人資料予第三人，始能提供  你所要求之服務 ；(4)政府機 構或執法機關，或本公司基於法律上之原因而須提供。本公司會確保上述 第三方於處理過程中遵從本服務之指示及本同意書與相關法令之規範。</li>
+					<li>8.個人資料之自主權: 您可向本公司申請就您提供的資料，依中華民國個人資料保護法之規
+					定行使權利，如：(1)查詢或請求閱覽、(2)請求製給複製本、(3)請求補充  或更正 、(4)請求停止蒐集、處理、利用或(5)請求刪除 ，然本公司得向您酌收處理 費用以 先行查證您是否 為個人資料所有人，並要求您提供相關個人資料以協助查證及處理程序。 倘您的要求將對國家重大利益、公務機關執行法定職務、蒐集機關或第三人之重大利益有  妨害 時，本公司有權拒絕您的申請。</li>
+					<li>9.您瞭解並同意不使用本服務提供之LINE官方帳號作為任何第三人之廣告媒體（包含但不限於透過使用LINE官方帳號宣傳第三人之商品或服務）。</li>
+					<li>10.您瞭解並同意本公司會向您提供由本公司提供者(LINE Provider)建立 的通道 （LINEChannel）綁定由本公司建立的LINE官方帳號並依您指定的名稱命名LINE官方帳號。</li>
+					<li>11.未經 本服務  事前 同意，不得要求或自行轉換 提供 者(LINE Provider)；若違反 此條 款，本公司有權暫停或 終止相關  官方帳號之使用。若您事前 向本公司告知且 本公司同意，您必須 自行申請LINE官方帳號服務，並建立 您專屬 的LINE提供 者(Provider)，再交 由本公司 整合使用，其整合費用及 顧問費  用由本公司另行報價 ，您 亦瞭解此過程需承擔數據資料服務延續性之  中斷 或遺失等 風險 ，，本公司不就因此所生之損害對客戶負擔任  何責任。</li>
+					<li>12.若您有使用LINE或其他社群服務，本公司及海內外關  係企 業可能於您使用本服務時，向您詢  問是否  將本服務之資訊發布 於您的社群頁面  ，若您不同意請勿點選同意鍵，然為尊重您的決定，您亦得隨時向本公司撤回該同意並於您的社群頁面上移除該等資訊。</li>
+					<li>13.您應確保所提供之個人資料係合法真  實且完整正確，若您提供之個人資料有虛偽、錯誤、違反 法令或侵害 第三人權利，可能導致 您無法使用本服務，本公司並有權終止對您的服務。 倘您提供之個人資料因違反上述情形，而 致第三人  受有損 害或受執法機關追訴責任，您瞭解並同意本公司不負擔任何責任。</li>
+					<li>14.若您不 願意提供，或要求本公司停止蒐集、處理、利用或刪除您的個人資料，本公司將尊重您的決定 ，但您可能因此無法使用本服務或完成 相關 交易 ，本公司並保留是否  同意終止對您的服務或完成相關交易之權利。</li>
+					<li>15.倘未成 年人於使用本服務有同意本公司蒐集、利用及處理其個人資訊時，應在法定代理人或 監護人之同意下為之。其法定代 理人或  監護人得隨時請求本公司  終止該帳號之服務，或請求本同意書第6條個人資料自主權之行為。</li>
+					<li>16.無論明示或暗示 ，本公司不保證LINE官方帳號或本服務含有之第三方連結及網站不存在事實上或法 律上 之瑕疵 （包含但不限於與安全性、可靠性、 正確性、  完整 性、有  效性、針對特 定目的之適用性、安全等相關之缺陷 、錯誤 、漏 洞、權利  侵害 等），您瞭解並同意本公司不就第三方對您引起的任何損害負擔責任。</li>
+					<li>17.您瞭解此個人資料授權原則及使用同意書符合個人資料保護法及相關法規之要 求，且瞭解其內容，並同意本同意書所列之事項 。本同意書如有未盡事宜，本服務將依中華 民國個人資料保護法或其他相關法規及其 後修訂  之規定辦  理。本公司將不定時修訂 本同意書，該修訂 之最新版  本將於  發布 時即當然生效。若您不同意修訂 之內容，請停止使用本服務，並依本同意書之規定通知本公司停止蒐集、處理、利用或刪除 您的個人資料。若您於該等修訂後，仍有繼續使用本服務之情事，則視為您同意受最新修訂之同意書內容所拘束。</li>
+					<li>18.您瞭解網際網路非百分之百安全的 環境，並可能存在事實上或法 律上 之瑕疵（包含但不限於與安全性、可靠性、 正確性、  完整 性、有  效性、 針對特 定目的之適用性、安全等相
+					關之 缺陷 、錯誤 、漏 洞、權利  侵害 等），  你同意對個人資料及使用本服務的資訊善盡 保管義務，對使用本服務的伺服器及裝置 安裝防毒軟體  或相關防護裝置 ，以 避免 外洩或  遭第三人取用，您須自行對 未善盡  保管 義務所 引起 之損 害負擔責任，您同時瞭解並同意自行承擔網際網路之環境風險及。</li>
+					<li>19.Cookies之使用: Cookies是一種小 型檔案 ，於您使用本服務時會儲存某些資訊 在您的使用 裝置(例如:電腦、平板、手機)中。您瞭解並同意本公司使用Cookies以利本公司分析、蒐集、保存您的使用模式、 喜好 ，以 增進 您使用本服務之體驗、維持本服務之運作、改善本服務之效能、 投放 適合您的廣告及為維持本公司營運之相關目的。為尊重您的決定，您 仍可以於您的裝置 瀏覽 器中 取消或限 制此功能。 然當您選擇限制或取 消Cookies時，可能導致您無法使用本服務之一部或全部之內容。</li>
+					<li>20.若您對本同意書所列事項有疑問，請聯絡本公司。</li>
+					<li>21.本同意書之解釋、履行及效力悉  依中華民國法  律為準據法，並以台灣台北地方法 院為第一審管轄法院。</li>
+				</ol>
+				<p>本人 已詳閱本服務依個人資料保護法所告知事項 並清楚 瞭解蒐集、處理或利用個人資料之目的及使用同意之授權。</p>
+			</div>
+		</div>
+	</main>
+
+
+	<!-- Swiper JS -->
+	<script src="js/swiper.min.js"></script>
+
+	<!-- Initialize Swiper -->
+	<script>
+    	// top 菜單
+		/* $(this).on("swipeleft", function(){
+			$('.swiper-slide p.btn_in').parent().next().find('p').parent().click();
+			mySwiper = $('.swiper-container')[0].swiper;
+			mySwiper.slideNext();
+		});
+		$(this).on("swiperight", function(){
+			$('.swiper-slide p.btn_in').parent().prev().find('p').parent().click();
+			var mySwiper = document.querySelector('.swiper-container').swiper
+			mySwiper.slidePrev();
+		});
+
+		var swiper = new Swiper('.swiper-container', {
+			navigation: {
+				nextEl: '.swiper-button-next',
+			},
+			slidesPerView: 'auto',
+			spaceBetween: 5,
+			freeMode: true,
+			centeredSlides: false,
+			// slideToClickedSlide: true,
+			observer:true,//修改swiper自己或子元素時，自動初始化swiper
+			observeParents:true//修改swiper的父元素時，自動初始化swiper
+		}); */
+
+		$('.product_list li').on('click',function(){
+			$('#food_items').modal('show');
+			//$('#login_notice').modal('show');
+		});
+
+		//加購品重複點擊可累加數量
+		$('.option_list .the_checkbox.choice_num').not('.out_of_stock').on('click',function(){
+			$(this).addClass('set');
+			$(this).children('.set_num').html( $(this).children('.set_num').html()*1+1 ).show();
+		});
+		$('.option_list .reset_all_num').on('click',function(){
+			$(this).closest('.option_list').find('.set').removeClass('set');
+			$(this).closest('.option_list').find('.set_num').html('0').hide();
+		});
+	</script>
+
+</body>
+</html>
